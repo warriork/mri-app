@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import '../init-msw';
+import { ApolloProvider } from '@apollo/client';
+import client from '../../lib/apolloClient'
 
 export const metadata: Metadata = {
   title: "Medical Patient Dashboard",
@@ -16,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body
       >
+      <ApolloProvider client={client}>
         {children}
+      </ApolloProvider>
       </body>
     </html>
   );
