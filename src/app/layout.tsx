@@ -1,26 +1,46 @@
-import type { Metadata } from "next";
+'use client'
 import "./globals.css";
-import '../init-msw';
-import { ApolloProvider } from '@apollo/client';
-import client from '../../lib/apolloClient'
-
-export const metadata: Metadata = {
-  title: "Medical Patient Dashboard",
-  description: "A responsive web application for displaying essential patient health data, including basic information and MRI brain scan images",
-};
+import {CustomApolloProvider} from "@/components/CustomApolloProvider/CustomApolloProvider";
+import {useEffect} from "react";
+import {setupMswWorker} from "../../mocks/browser";
+import {SetupWorker} from "msw/browser";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+    useEffect(() => {
+        let mswWorker:SetupWorker | undefined;
+        const startMswWorker = async () => {
+            mswWorker = await setupMswWorker();
+            await mswWorker?.start({ quiet: false});
+            console.log('MSW is ready');
+        }
+        if (process.env.NODE_ENV === "development") {
+              startMswWorker();
+        }
+        return () => {
+            mswWorker?.stop();
+        }
+    }, []);
   return (
     <html lang="en">
       <body
       >
-      <ApolloProvider client={client}>
+      <CustomApolloProvider >
+          <header></header>
+          <main>
         {children}
-      </ApolloProvider>
+          </main>
+          <footer className="h-12 border-t border-black flex flex-row space-x-1 p-4">
+           <p>Home work for <span className='font-bold'>Neurona Lab</span></p>
+            <p>
+                Ihor Fesina 2024
+            </p>
+          </footer>
+      </CustomApolloProvider>
       </body>
     </html>
   );

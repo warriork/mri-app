@@ -1,14 +1,73 @@
 import { graphql } from 'msw';
-import patients from '../data/patients.json';
 
 export const handlers = [
-    graphql.query('GetAllPatients', (req, res, ctx) => {
+    graphql.query('GetAllPersons', (req, res, ctx) => {
         return res(ctx.data({ persons: patients }));
     }),
 
-    graphql.query('GetPatientByRC', (req, res, ctx) => {
+    graphql.query('GetPersonByRC', (req, res, ctx) => {
         const { rc } = req.variables;
-        const person = patients.find(person => person.rc === rc);
+        const person = patients.find(patient => patient.rc === rc);
         return res(ctx.data({ person }));
     }),
 ];
+
+const patients=[
+    { "rc": "671007/1690",
+        "birth": "07.10.1997",
+        "name": "Jan Barta",
+        "age": 57,
+        "condition": "indeterminate",
+        "mris":[
+            {
+                "date": "10.11.2024",
+                "scan": "/img/mri/mri1.webp",
+                "condition": "indeterminate"
+            }
+        ]
+    },
+    { "rc": "601010/1220",
+        "birth": "10.10.1960",
+        "name": "Ales Cerny",
+        "age": 64,
+        "condition": "Tumor",
+        "mris":[
+            {
+                "date": "15.11.2024",
+                "scan": "/img/mri/mri1.webp",
+                "condition": "Tumor"
+            },
+            {
+                "date": "10.08.2024",
+                "scan": "/img/mri/mri1.webp",
+                "condition": "indeterminate"
+            }
+        ]
+    },
+    { "rc": "540505/1234",
+        "birth": "05.05.1954",
+        "name": "Petr Levy",
+        "age": 70,
+        "condition": "Alzheimer’s disease",
+        "mris":[
+            {
+                "date": "15.11.2024",
+                "scan": "/img/mri/mri1.webp",
+                "condition": "Alzheimer’s disease"
+            }
+        ]
+    },
+    { "rc": "640505/4321",
+        "birth": "05.05.1964",
+        "name": "Anna Spurna",
+        "age": 80,
+        "condition": "Stroke",
+        "mris":[
+            {
+                "date": "10.02.2024",
+                "scan": "/img/mri/mri1.webp",
+                "condition": "Stroke"
+            }
+        ]
+    }
+]
